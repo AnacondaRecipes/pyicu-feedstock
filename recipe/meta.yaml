@@ -1,4 +1,4 @@
-{% set version = "2.6" %}
+{% set version = "2.7.4" %}
 
 package:
   name: pyicu
@@ -6,12 +6,13 @@ package:
 
 source:
   url: https://pypi.io/packages/source/P/PyICU/PyICU-{{ version }}.tar.gz
-  sha256: a9a5bf6833360f8f69e9375b91c1a7dd6e0c9157a42aee5bb7d6891804d96371
+  sha256: c0655302e2aea16f9acefe04152f74e5d7d70542e9e15c89ee8d763c8e097f56
 
 build:
-  number: 1
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
-  skip: true  # [win]
+  number: 0
+  skip: True  # [win]
+  script: 
+    - {{ PYTHON }} -m pip install . --no-deps -vv  # [not win]
 
 requirements:
   build:
@@ -20,21 +21,23 @@ requirements:
   host:
     - python
     - pip
-    - cld2-cffi
     - icu
+    - setuptools
+    - wheel
   run:
     - python
-    - cld2-cffi
     - icu
 
 test:
+  imports:
+    - icu
   commands:
     - python -c "from icu import Locale;locale = Locale('pt_BR')"
 
 about:
-  home: https://github.com/ovalhub/pyicu
-  license: OTHER
-  license_family: OTHER
+  home: https://gitlab.pyicu.org/main/pyicu
+  license: MIT
+  license_family: MIT
   license_file: LICENSE
   summary: Welcome to PyICU, a Python extension wrapping the ICU C++ libraries.
 
@@ -43,8 +46,8 @@ about:
     ICU stands for "International Components for Unicode". These are the i18n
     libraries of the Unicode Consortium. They implement much of the Unicode Standard,
     many of its companion Unicode Technical Standards, and much of Unicode CLDR.
-  doc_url: https://github.com/ovalhub/pyicu
-  dev_url: https://github.com/ovalhub/pyicu
+  doc_url: https://gitlab.pyicu.org/main/pyicu/-/blob/main/README.md
+  dev_url: https://gitlab.pyicu.org/main/pyicu
 
 extra:
   recipe-maintainers:
