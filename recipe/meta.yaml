@@ -1,4 +1,4 @@
-{% set version = "2.7.4" %}
+{% set version = "2.11" %}
 
 package:
   name: pyicu
@@ -6,13 +6,13 @@ package:
 
 source:
   url: https://pypi.io/packages/source/P/PyICU/PyICU-{{ version }}.tar.gz
-  sha256: c0655302e2aea16f9acefe04152f74e5d7d70542e9e15c89ee8d763c8e097f56
+  sha256: 3ab531264cfe9132b3d2ac5d708da9a4649d25f6e6813730ac88cf040a08a844
 
 build:
   number: 0
   skip: True  # [win]
   script: 
-    - {{ PYTHON }} -m pip install . --no-deps -vv  # [not win]
+    - {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv  # [not win]
 
 requirements:
   build:
@@ -21,7 +21,7 @@ requirements:
   host:
     - python
     - pip
-    - icu
+    - icu 73
     - setuptools
     - wheel
   run:
@@ -32,7 +32,10 @@ test:
   imports:
     - icu
   commands:
+    - pip check
     - python -c "from icu import Locale;locale = Locale('pt_BR')"
+  requires:
+    - pip
 
 about:
   home: https://gitlab.pyicu.org/main/pyicu
