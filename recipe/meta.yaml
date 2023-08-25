@@ -21,7 +21,7 @@ requirements:
   host:
     - python
     - pip
-    - icu {{ icu }}
+    - icu 73
     - setuptools
     - wheel
   run:
