@@ -7,13 +7,10 @@ package:
 source:
   url: https://pypi.io/packages/source/p/pyicu/pyicu-{{ version }}.tar.gz
   sha256: 006d51e24b5ec76df6ec2130f3dde269c51db8b8cfebb7d45a427dde0d10aa52
-  patches:
-    - 0001-fix-macos-AnnualTimeZoneRule-MAX_YEAR-symbol.patch  # [osx]
 
 build:
   number: 0
   skip: True  # [win]
-  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
   build:
@@ -29,7 +26,7 @@ requirements:
     - wheel
   run:
     - python
-    - icu
+    - icu 78
 
 test:
   source_files:
