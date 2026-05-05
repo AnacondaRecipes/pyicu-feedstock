@@ -1,0 +1,26 @@
+Avoid odr-use of icu::AnnualTimeZoneRule::MAX_YEAR
+
+ICU declares AnnualTimeZoneRule::MAX_YEAR as a `static const int32_t`
+without `U_I18N_API` decoration. On macOS conda builds of ICU use
+-fvisibility=hidden, so the symbol is not exported from
+libicui18n.dylib. The macro INSTALL_STATIC_INT(AnnualTimeZoneRule,
+MAX_YEAR) emits an odr-use of that symbol; at import time dyld then
+fails with:
+
+    ImportError: dlopen(...): symbol not found in flat namespace
+    '__ZN6icu_7318AnnualTimeZoneRule8MAX_YEARE'
+
+ICU defines this constant as 0x7FFFFFFF in tzrule.cpp. Inline the
+literal value via INSTALL_ENUM to avoid the unresolved external
+reference. The Python attribute AnnualTimeZoneRule.MAX_YEAR keeps its
+original semantics and value.
+
+--- a/timezone.cpp
++++ b/timezone.cpp
+@@ -2128,5 +2128,5 @@
+     INSTALL_STATIC_INT(SimpleTimeZone, STANDARD_TIME);
+     INSTALL_STATIC_INT(SimpleTimeZone, UTC_TIME);
+ 
+-    INSTALL_STATIC_INT(AnnualTimeZoneRule, MAX_YEAR);
++    INSTALL_ENUM(AnnualTimeZoneRule, "MAX_YEAR", 0x7FFFFFFF);
+ }
